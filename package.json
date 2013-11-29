@@ -1,0 +1,19 @@
+{
+	"name": "a11yAccordion",
+	"title": "a11y Accordion",
+	"description": "An accessible jQuery accordion plugin.",
+	"author": "Nathan Kleekamp",
+	"homepage": "https://github.com/rubric77/accessible-accordion/",
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-cli": "~0.1.7",
+		"grunt-contrib-jshint": "~0.4.3",
+		"grunt-contrib-concat": "~0.3.0",
+		"grunt-contrib-uglify": "~0.2.0",
+		"grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-cssmin": "*"
+	},
+	"scripts": {
+		"test": "grunt travis --verbose"
+	}
+}
