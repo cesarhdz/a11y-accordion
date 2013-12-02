@@ -22,7 +22,12 @@
 
 		Plugin.prototype = {
 				init: function () {
+            // These are all "dt" elements on the page in an accordion
+            this.$allTitles = $(".js-accordion dt");
+
+            // These are only the "dt" elements in the element
             this.$titles = $("dt", this.element);
+
             this.$panels = $("dd", this.element);
 
             this.bindUiActions();
@@ -32,15 +37,24 @@
         bindUiActions: function() {
             this.click();
             this.keyDown();
+            this.focus();
         },
 
         setDefaultAriaAttr: function() {
-            this.$titles.attr({
-                "aria-selected": "false",
-                "aria-expanded": "false"
-            });
+            // Sets all default Aria related attributes
+            this.$titles.
+                attr({
+                    "aria-selected": "false",
+                    "aria-expanded": "false"
+            }).
+                not(":first").attr("tabindex", "-1");
 
-            this.$panels.addClass("hide").attr("aria-hidden", "true");
+            // Prevents tabbing through all DOM elements in a non-selected panel
+            this.$panels.addClass("hide")
+                        .attr("aria-hidden", "true")
+                        .find("*").each(function() {
+                            $(this).attr("tabindex", "-1");
+                        });
         },
 
         click: function() {
@@ -69,35 +83,59 @@
                         break;
 
                     case(e.which === keys.right):
-                        _this.nextTab( $(this) );
+                        _this.moveTo("next");
                         break;
 
                     case(e.which === keys.down):
-                        _this.nextTab( $(this) );
+                        _this.moveTo("next");
                         break;
 
                     case(e.which === keys.left):
-                        _this.previousTab( $(this) );
+                        _this.moveTo("previous");
                         break;
 
                     case(e.which === keys.up):
-                        _this.previousTab( $(this) );
+                        _this.moveTo("previous");
                         break;
 
                     case(e.which === keys.home):
-                        _this.firstTab( $(this) );
+                        _this.moveTo("first");
                         break;
 
                     case(e.which === keys.end):
-                        _this.lastTab( $(this) );
+                        _this.moveTo("last");
                         break;
                 }
             });
 
             _this.$panels.on("keydown", function(e) {
                 if (e.which === keys.up && e.ctrlKey) {
-                    _this.parentTitle( $(this) );
+                    var $title = $(this).prev();
+                    $title.focus();
                 }
+            });
+        },
+
+        focus: function() {
+            var _this = this;
+
+            _this.$titles.
+                on("focus", function() {
+                    var $self = $(this),
+                        $otherTitles = _this.$titles.not($self),
+                        $allOtherTitles = _this.$allTitles.not($self);
+
+                    // Set appropriate attributes on selected title
+                    $self.attr({
+                        "aria-selected": "true",
+                        "tabindex": "0"
+                    });
+
+                    // Disable tabing to other titles in the current accordion
+                    $otherTitles.attr("tabindex", "-1");
+
+                    // Set aria-selected="false" on all other accordion titles on the page
+                    $allOtherTitles.attr("aria-selected", "false");
             });
         },
 
@@ -106,7 +144,6 @@
 
             ele.removeClass("hide").attr("aria-hidden", "false");
             $title.attr("aria-expanded", "true");
-            this.focusedTitle();
             this.setChildrenTabIndex();
         },
 
@@ -128,58 +165,28 @@
             }
         },
 
-        nextTab: function(ele) {
-            try {
-                var $target = ele.next("dd").next("dt")[0];
-                $target.focus();
-                this.focusedTitle();
-            // Really hate this try...catch construct. @todo: fix it
-            } catch (e) {
-                if (!(e instanceof TypeError)) {
-                    throw e;
-                }
-            }
-        },
+        moveTo: function(target) {
+            var _this = this,
+                $focused = $(document.activeElement),
+                $next = $focused.nextAll("dt").first(),
+                $previous = $focused.prevAll("dt").first();
 
-        previousTab: function(ele) {
-            try {
-                var $target = ele.prev("dd").prev("dt")[0];
-                $target.focus();
-                this.focusedTitle();
-            // Really hate this try...catch construct. @todo: fix it
-            } catch (e) {
-                if (!(e instanceof TypeError)) {
-                    throw e;
-                }
-            }
-        },
+            switch(true) {
+                case(target === "first"):
+                    _this.$titles.first().focus();
+                    break;
 
-        firstTab: function() {
-            this.$title.first().focus();
-            this.focusedTitle();
-        },
+                case(target === "last"):
+                    _this.$titles.last().focus();
+                    break;
 
-        lastTab: function() {
-            this.$title.last().focus();
-            this.focusedTitle();
-        },
+                case(target === "next"):
+                    $next.focus();
+                    break;
 
-        parentTitle: function(ele) {
-            var $title = ele.prev();
-            $title.focus();
-            this.focusedTitle();
-        },
-
-        // Set proper aria-selected attribute on accordion titles
-        // @todo: make this better. The "if" statement breaks keyboard
-        // navigation if there"s more than one accordion on the page.
-        focusedTitle: function() {
-            var $prevSelected = $("dt[aria-selected='true']"),
-                $focused = $(document.activeElement);
-
-            if ($focused.is("dt")) {
-                $prevSelected.attr("aria-selected", "false").attr("tabindex", "-1");
-                $focused.attr("aria-selected", "true").attr("tabindex", "0");
+                case(target === "previous"):
+                    $previous.focus();
+                    break;
             }
         },
 
@@ -188,6 +195,7 @@
             var $active = $("dt[aria-expanded='true']"),
                 $activeTabPanel = $active.next();
 
+            // The children needs to be replaced with find like in setDefaultAriaAttr
             $activeTabPanel.children().attr("tabindex", "0");
         },
 
@@ -196,6 +204,7 @@
             var $nonActive = $("dt[aria-expanded='false']"),
                 $nonActiveTabPanel = $nonActive.next();
 
+            // The children needs to be replaced with find like in setDefaultAriaAttr
             $nonActiveTabPanel.children().attr("tabindex", "-1");
         }
 		};
