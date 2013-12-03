@@ -1,37 +1,37 @@
 {
-	"name": "a11yAccordion",
-	"title": "a11y Accordion",
-	"description": "An accessible jquery accordion plugin.",
-	"keywords": [
-		"jquery",
-		"accordion",
+  "name": "a11yAccordion",
+  "title": "a11y Accordion",
+  "description": "An accessible jquery accordion plugin.",
+  "keywords": [
+    "jquery",
+    "accordion",
     "accessible",
     "a11y",
-		"plugins"
-	],
-	"version": ".10",
-	"author": {
-		"name": "Nathan Kleekamp",
-		"email": "nkleekamp@gmail.com",
-		"url": "https://github.com/rubric77"
-	},
-	"maintainers": [
-		{
-			"name": "Nathan Kleekamp",
-			"email": "nkleekamp@gmail.com",
-			"url": "https://github.com/rubric77"
-		}
-	],
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://opensource.org/licenses/MIT"
-		}
-	],
-	"bugs": "https://github.com/rubric77/accessible-accordion",
-	"docs": "https://github.com/jquery-boilerplate/boilerplate#readme",
-	"download": "https://github.com/rubric77/accessible-accordion/archive/master.zip",
-	"dependencies": {
-		"jquery": ">=1.10.2"
-	}
+    "plugins"
+  ],
+  "version": ".10",
+  "author": {
+    "name": "Nathan Kleekamp",
+    "email": "nkleekamp@gmail.com",
+    "url": "https://github.com/rubric77"
+  },
+  "maintainers": [
+    {
+      "name": "Nathan Kleekamp",
+      "email": "nkleekamp@gmail.com",
+      "url": "https://github.com/IIP-OIE"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "bugs": "https://github.com/IIP-OIE/a11y-accordion/issues",
+  "docs": "https://github.com/IIP-OIE/a11y-accordion#readme",
+  "download": "https://github.com/IIP-OIE/a11y-accordion/archive/master.zip",
+  "dependencies": {
+    "jquery": ">=1.10.2"
+  }
 }
