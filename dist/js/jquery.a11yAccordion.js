@@ -6,61 +6,225 @@
  *  Made by Nathan Kleekamp
  *  Under MIT License
  */
-// the semi-colon before function invocation is a safety net against concatenated
-// scripts and/or other plugins which may not be closed properly.
 ;(function ( $, window, document, undefined ) {
 
-		// undefined is used here as the undefined global variable in ECMAScript 3 is
-		// mutable (ie. it can be changed by someone else). undefined isn't really being
-		// passed in so we can ensure the value of it is truly undefined. In ES5, undefined
-		// can no longer be modified.
+    // Create the defaults once
+    var pluginName = "a11yAccordion",
+        keys = {
+            enter: 13,
+            space: 32,
+            end: 35,
+            home: 36,
+            left: 37,
+            up: 38,
+            right: 39,
+            down: 40
+    };
 
-		// window and document are passed through as local variable rather than global
-		// as this (slightly) quickens the resolution process and can be more efficiently
-		// minified (especially when both are regularly referenced in your plugin).
+    // The actual plugin constructor
+    function Plugin ( element ) {
+        this.element = element;
+        this._name = pluginName;
+        this.init();
+    }
 
-		// Create the defaults once
-		var pluginName = "a11yAccordion",
-				defaults = {
-				propertyName: "value"
-		};
+    Plugin.prototype = {
+        init: function () {
+            // These are all "dt" elements on the page in an accordion
+            this.$allTitles = $(".js-accordion dt");
 
-		// The actual plugin constructor
-		function Plugin ( element, options ) {
-				this.element = element;
-				// jQuery has an extend method which merges the contents of two or
-				// more objects, storing the result in the first object. The first object
-				// is generally empty as we don't want to alter the default options for
-				// future instances of the plugin
-				this.options = $.extend( {}, defaults, options );
-				this._defaults = defaults;
-				this._name = pluginName;
-				this.init();
-		}
+            // These are only the "dt" elements in the element
+            this.$titles = $("dt", this.element);
 
-		Plugin.prototype = {
-				init: function () {
-						// Place initialization logic here
-						// You already have access to the DOM element and
-						// the options via the instance, e.g. this.element
-						// and this.options
-						// you can add more functions like the one below and
-						// call them like so: this.yourOtherFunction(this.element, this.options).
-						console.log("xD");
-				},
-				yourOtherFunction: function () {
-						// some logic
-				}
-		};
+            this.$panels = $("dd", this.element);
 
-		// A really lightweight plugin wrapper around the constructor,
-		// preventing against multiple instantiations
-		$.fn[ pluginName ] = function ( options ) {
-				return this.each(function() {
-						if ( !$.data( this, "plugin_" + pluginName ) ) {
-								$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
-						}
-				});
-		};
+            this.bindUiActions();
+            this.setDefaultAriaAttr();
+        },
+
+        bindUiActions: function() {
+            this.click();
+            this.keyDown();
+            this.focus();
+        },
+
+        setDefaultAriaAttr: function() {
+            // Sets all default Aria related attributes on $titles, $panels, and
+            // all panel children
+
+            var _this = this;
+
+            _this.$titles.
+                attr("aria-selected", "false").
+                not(":first").
+                attr("tabindex", "-1");
+
+            // Hides and prevents tabbing through all DOM elements in a non-selected panel
+            // Also sets aria-expanded="false" by default on $titles.
+            _this.$panels.each(function() {
+                _this.hide($(this));
+            });
+        },
+
+        click: function() {
+            var _this = this;
+
+            _this.$titles.
+                on("click", function() {
+                    _this.toggle( $(this) );
+            }).
+                on("selectstart", function(e) {
+                    e.preventDefault();
+            });
+        },
+
+        keyDown: function() {
+            var _this = this;
+
+            _this.$titles.on("keydown", function(e) {
+                switch(true) {
+                    case(e.which === keys.enter):
+                        _this.toggle( $(this) );
+                        break;
+
+                    case(e.which === keys.space):
+                        _this.toggle( $(this) );
+                        break;
+
+                    case(e.which === keys.right):
+                        _this.moveTo("next");
+                        break;
+
+                    case(e.which === keys.down):
+                        _this.moveTo("next");
+                        break;
+
+                    case(e.which === keys.left):
+                        _this.moveTo("previous");
+                        break;
+
+                    case(e.which === keys.up):
+                        _this.moveTo("previous");
+                        break;
+
+                    case(e.which === keys.home):
+                        _this.moveTo("first");
+                        break;
+
+                    case(e.which === keys.end):
+                        _this.moveTo("last");
+                        break;
+                }
+            });
+
+            _this.$panels.on("keydown", function(e) {
+                if (e.which === keys.up && e.ctrlKey) {
+                    // $(this).prev() is the title
+                    $(this).prev().focus();
+                }
+            });
+        },
+
+        focus: function() {
+            var _this = this;
+
+            _this.$titles.
+                on("focus", function() {
+                    var $self = $(this),
+                        $otherTitles = _this.$titles.not($self),
+                        $allOtherTitles = _this.$allTitles.not($self);
+
+                    // Set appropriate attributes on selected title
+                    $self.attr({
+                        "aria-selected": "true",
+                        "tabindex": "0"
+                    });
+
+                    // Disable tabing to other titles in the current accordion
+                    $otherTitles.attr("tabindex", "-1");
+
+                    // Set aria-selected="false" on all other accordion titles on the page
+                    $allOtherTitles.attr("aria-selected", "false");
+            });
+        },
+
+        show: function($panel) {
+            // Removes "hide" class and sets appropriate aria/tabindex attr on title, panel,
+            // and all panel children.
+            $panel.
+                removeClass("hide").
+                attr("aria-hidden", "false").
+                find("*").each(function() {
+                    $(this).attr("tabindex", "0");
+            });
+
+            // panel.prev() is the "title"
+            $panel.prev().attr("aria-expanded", "true");
+        },
+
+        hide: function($panel) {
+            // Adds "hide" class and sets appropriate aria/tabindex attr on title, panel,
+            // and all panel children.
+            $panel.
+                addClass("hide").
+                attr("aria-hidden", "true").
+                find("*").each(function() {
+                    $(this).attr("tabindex", "-1");
+            });
+
+            // panel.prev() is the "title"
+            $panel.prev().attr("aria-expanded", "false");
+        },
+
+        toggle: function($title) {
+            var $panel = $title.next();
+
+            if ( $panel.hasClass("hide") ) {
+                this.show($panel);
+            } else {
+                this.hide($panel);
+            }
+        },
+
+        moveTo: function(target) {
+            // Simple switch statement facilitating focus movement 
+            var _this = this,
+                $focused = $(document.activeElement),
+
+                // Grab the next "dt"
+                $next = $focused.nextAll("dt").first(),
+
+                // Grab the previous "dt"
+                $previous = $focused.prevAll("dt").first();
+
+            switch(true) {
+                case(target === "first"):
+                    _this.$titles.first().focus();
+                    break;
+
+                case(target === "last"):
+                    _this.$titles.last().focus();
+                    break;
+
+                case(target === "next"):
+                    $next.focus();
+                    break;
+
+                case(target === "previous"):
+                    $previous.focus();
+                    break;
+            }
+        }
+    };
+
+    // A really lightweight plugin wrapper around the constructor,
+    // preventing against multiple instantiations
+    $.fn[ pluginName ] = function ( options ) {
+        return this.each(function() {
+            if ( !$.data( this, "plugin_" + pluginName ) ) {
+                $.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+            }
+        });
+    };
 
 })( jQuery, window, document );

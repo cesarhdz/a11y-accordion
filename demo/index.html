@@ -3,66 +3,34 @@
 	<head>
 		<title>jQuery a11y Accordion</title>
     <link rel="stylesheet" href="../dist/css/styles.min.css" />
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script src="../dist/jquery.a11yAccordion.js"></script>
 	</head>
 	<body>
-    <header role="banner">
-      <h1>Accessible Accordion</h1>
-      <h2 id="nav-label" class="label">Main Navigation</h2>
-      <nav role="navigation" aria-labeledby="nav-label">
-        <ul class="nav">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Second</a></li>
-          <li><a href="#">Third</a></li>
-          <li><a href="#">Forth</a></li>
-          <li><a href="#">Fif</a></li>
-        </ul>
-      </nav>
-    </header>
-    <div id="main" role="main">
-      <dl id="myAccordion" class="js-accordion accordion" role="tablist" aria-multiselectable="true">
-        <dt id="myAccordion-title1" role="tab" aria-controls="myAccordion-panel1" aria-selected="true" aria-expanded="true" tabindex="0">Veggies sunt bona vobis</dt>
-        <dd id="myAccordion-panel1" role="tabpanel" aria-labelledby="myAccordion-title1" aria-hidden="false">
-          <p id="p-bona">Veggies sunt <a href="#" id="bona">bona vobis</a>, proinde vos postulo esse magis earthnut pea kohlrabi watercress epazote yarrow amaranth lettuce tatsoi pea sprouts celery salsify bell pepper sierra leone bologi peanut eggplant salad.</p>
-        </dd>
-        <dt id="myAccordion-title2" role="tab" aria-controls="myAccordion-panel2" aria-selected="true" aria-expanded="true" tabindex="0">Coriander bitterleaf</dt>
-        <dd id="myAccordion-panel2" role="tabpanel" aria-labelledby="myAccordion-title2" aria-hidden="false">
-          <p>Coriander bitterleaf epazote tigernut grape catsear bunya nuts swiss chard aubergine. Quandong broccoli earthnut pea sweet pepper beetroot beet greens welsh onion chickpea artichoke pea sprouts kombu cress arugula. Zucchini kale water spinach pea sprouts spinach quandong lotus root collard greens radicchio chickweed brussels sprout gourd gram bell pepper fava bean komatsuna.</p>
-        </dd>
-        <dt id="myAccordion-title3" role="tab" aria-controls="myAccordion-panel3" aria-selected="true" aria-expanded="true" tabindex="0">Coriander bitterleaf again</dt>
-        <dd id="myAccordion-panel3" role="tabpanel" aria-labelledby="myAccordion-title3" aria-hidden="false">
-          <p>Coriander bitterleaf epazote tigernut grape catsear bunya nuts swiss chard aubergine. Quandong broccoli earthnut pea sweet pepper beetroot beet greens welsh onion chickpea artichoke pea sprouts kombu cress arugula. Zucchini kale water spinach pea sprouts spinach quandong lotus root collard greens radicchio chickweed brussels sprout gourd gram bell pepper fava bean komatsuna.</p>
-          <p>Second paragraph to test adding tabindex attribute.</p>
-        </dd>
-      </dl>
-      <dl id="myAccordion1" class="js-accordion accordion" role="tablist" aria-multiselectable="true">
-        <dt id="myAccordion1-title1" role="tab" aria-controls="myAccordion1-panel1" aria-selected="true" aria-expanded="true" tabindex="0">Veggies sunt bona vobis</dt>
-        <dd id="myAccordion1-panel1" role="tabpanel" aria-labelledby="myAccordion1-title1" aria-hidden="false">
-          <p id="p-bona1">Veggies sunt <a href="#" id="bona1">bona vobis</a>, proinde vos postulo esse magis earthnut pea kohlrabi watercress epazote yarrow amaranth lettuce tatsoi pea sprouts celery salsify bell pepper sierra leone bologi peanut eggplant salad.</p>
-        </dd>
-        <dt id="myAccordion1-title2" role="tab" aria-controls="myAccordion1-panel2" aria-selected="true" aria-expanded="true" tabindex="0">Coriander bitterleaf</dt>
-        <dd id="myAccordion1-panel2" role="tabpanel" aria-labelledby="myAccordion1-title2" aria-hidden="false">
-          <p>Coriander bitterleaf epazote tigernut grape catsear bunya nuts swiss chard aubergine. Quandong broccoli earthnut pea sweet pepper beetroot beet greens welsh onion chickpea artichoke pea sprouts kombu cress arugula. Zucchini kale water spinach pea sprouts spinach quandong lotus root collard greens radicchio chickweed brussels sprout gourd gram bell pepper fava bean komatsuna.</p>
-        </dd>
-        <dt id="myAccordion1-title3" role="tab" aria-controls="myAccordion1-panel3" aria-selected="true" aria-expanded="true" tabindex="0">Coriander bitterleaf again</dt>
-        <dd id="myAccordion1-panel3" role="tabpanel" aria-labelledby="myAccordion1-title3" aria-hidden="false">
-          <p>Coriander bitterleaf epazote tigernut grape catsear bunya nuts swiss chard aubergine. Quandong broccoli earthnut pea sweet pepper beetroot beet greens welsh onion chickpea artichoke pea sprouts kombu cress arugula. Zucchini kale water spinach pea sprouts spinach quandong lotus root collard greens radicchio chickweed brussels sprout gourd gram bell pepper fava bean komatsuna.</p>
-          <p>Second paragraph to test adding tabindex attribute.</p>
-        </dd>
-      </dl>
-    </div>
-    <footer role="contentinfo">
-      <ul>
-        <li>Copyright</li>
-        <li>Terms of Service</li>
-      </ul>
-    </footer>
+    <dl class="js-accordion accordion" role="tablist" aria-multiselectable="true">
+      <dt id="title1" role="tab" aria-controls="panel1" aria-selected="true" aria-expanded="true" tabindex="0">
+        Lorem ipsum dolor
+      </dt>
+      <dd id="panel1" role="tabpanel" aria-labelledby="title1" aria-hidden="false">
+        <p>Lorem ipsum dolor sit amet, arcu ut ut. Dui velit wisi egestas etiam ridiculus, sapien viverra dignissim convallis massa erat, duis non nonummy et amet a, libero posuere maecenas metus, aliquam pede ante placerat erat donec. Libero nunc aliquam sit. Justo pellentesque.</p>
+      </dd>
 
+      <dt id="title2" role="tab" aria-controls="panel2" aria-selected="true" aria-expanded="true" tabindex="0">
+        Et turpis dui wisi vel
+      </dt>
+      <dd id="panel2" role="tabpanel" aria-labelledby="title2" aria-hidden="false">
+        <p>Et turpis dui wisi vel consequat, fermentum mauris, in magna curabitur consectetuer, ultricies metus, nascetur semper. Sed nulla curabitur hymenaeos consectetuer risus, eu sed ante, earum vitae, id auctor vehicula fusce dapibus. Elit hymenaeos in pulvinar, massa praesent eget vulputate augue vulputate, fermentum mauris lectus aenean risus, fringilla curae varius purus scelerisque consequat.</p>
+      </dd>
+
+      <dt id="title3" role="tab" aria-controls="panel3" aria-selected="true" aria-expanded="true" tabindex="0">
+        Placerat eiusmod
+      </dt>
+      <dd id="panel3" role="tabpanel" aria-labelledby="title3" aria-hidden="false">
+        <p>Placerat eiusmod tristique id, lorem nunc sit tellus non, lectus wisi turpis elementum diam volutpat, id metus bibendum integer enim. Lobortis rutrum ut pede. Odio fusce proin beatae justo, lacus purus conubia, erat rhoncus quis, curabitur amet odio sodales sodales amet non, sit hic vel turpis cras. Class posuere, sociosqu leo. Cum est in, magna nunc at parturient massa risus nibh. Porttitor phasellus excepteur erat vitae. Interdum euismod vel maecenas sit a.</p>
+      </dd>
+    </dl>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="../dist/js/jquery.a11yAccordion.min.js"></script>
 		<script>
-			//$(function() {
-				var accordions = $(".js-accordion").a11yAccordion();
-			//});
+		    $(".js-accordion").a11yAccordion();
 		</script>
 	</body>
 </html>

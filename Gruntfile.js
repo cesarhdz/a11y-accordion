@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 		concat: {
 			dist: {
 				src: ["src/jquery.a11yAccordion.js"],
-				dest: "dist/jquery.a11yAccordion.js"
+				dest: "dist/js/jquery.a11yAccordion.js"
 			},
 			options: {
 				banner: "<%= meta.banner %>"
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
 		// Minify definitions
 		uglify: {
 			my_target: {
-				src: ["dist/js/jquery.a11yAccordion.js"],
+				src: ["src/jquery.a11yAccordion.js"],
 				dest: "dist/js/jquery.a11yAccordion.min.js"
 			},
 			options: {
