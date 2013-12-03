@@ -6,10 +6,10 @@
  *  Made by Nathan Kleekamp
  *  Under MIT License
  */
-//;(function ( $, window, document, undefined ) {
+;(function ( $, window, document, undefined ) {
 
-		// Create the defaults once
-		var pluginName = "a11yAccordion",
+    // Create the defaults once
+    var pluginName = "a11yAccordion",
         keys = {
             enter: 13,
             space: 32,
@@ -19,17 +19,17 @@
             up: 38,
             right: 39,
             down: 40
-        };
+    };
 
-		// The actual plugin constructor
-		function Plugin ( element ) {
-				this.element = element;
-				this._name = pluginName;
-				this.init();
-		}
+    // The actual plugin constructor
+    function Plugin ( element ) {
+        this.element = element;
+        this._name = pluginName;
+        this.init();
+    }
 
-		Plugin.prototype = {
-				init: function () {
+    Plugin.prototype = {
+        init: function () {
             // These are all "dt" elements on the page in an accordion
             this.$allTitles = $(".js-accordion dt");
 
@@ -40,7 +40,7 @@
 
             this.bindUiActions();
             this.setDefaultAriaAttr();
-				},
+        },
 
         bindUiActions: function() {
             this.click();
@@ -49,20 +49,21 @@
         },
 
         setDefaultAriaAttr: function() {
-            // Sets all default Aria related attributes
-            this.$titles.
-                attr({
-                    "aria-selected": "false",
-                    "aria-expanded": "false"
-            }).
-                not(":first").attr("tabindex", "-1");
+            // Sets all default Aria related attributes on $titles, $panels, and
+            // all panel children
 
-            // Prevents tabbing through all DOM elements in a non-selected panel
-            this.$panels.addClass("hide")
-                        .attr("aria-hidden", "true")
-                        .find("*").each(function() {
-                            $(this).attr("tabindex", "-1");
-                        });
+            var _this = this;
+
+            _this.$titles.
+                attr("aria-selected", "false").
+                not(":first").
+                attr("tabindex", "-1");
+
+            // Hides and prevents tabbing through all DOM elements in a non-selected panel
+            // Also sets aria-expanded="false" by default on $titles.
+            _this.$panels.each(function() {
+                _this.hide($(this));
+            });
         },
 
         click: function() {
@@ -118,8 +119,8 @@
 
             _this.$panels.on("keydown", function(e) {
                 if (e.which === keys.up && e.ctrlKey) {
-                    var $title = $(this).prev();
-                    $title.focus();
+                    // $(this).prev() is the title
+                    $(this).prev().focus();
                 }
             });
         },
@@ -147,36 +148,53 @@
             });
         },
 
-        show: function(ele) {
-            var $title = ele.prev();
+        show: function($panel) {
+            // Removes "hide" class and sets appropriate aria/tabindex attr on title, panel,
+            // and all panel children.
+            $panel.
+                removeClass("hide").
+                attr("aria-hidden", "false").
+                find("*").each(function() {
+                    $(this).attr("tabindex", "0");
+            });
 
-            ele.removeClass("hide").attr("aria-hidden", "false");
-            $title.attr("aria-expanded", "true");
-            this.setChildrenTabIndex();
+            // panel.prev() is the "title"
+            $panel.prev().attr("aria-expanded", "true");
         },
 
-        hide: function(ele) {
-            var $title = ele.prev();
+        hide: function($panel) {
+            // Adds "hide" class and sets appropriate aria/tabindex attr on title, panel,
+            // and all panel children.
+            $panel.
+                addClass("hide").
+                attr("aria-hidden", "true").
+                find("*").each(function() {
+                    $(this).attr("tabindex", "-1");
+            });
 
-            ele.addClass("hide").attr("aria-hidden", "true");
-            $title.attr("aria-expanded", "false");
-            this.unsetChildrenTabIndex();
+            // panel.prev() is the "title"
+            $panel.prev().attr("aria-expanded", "false");
         },
 
-        toggle: function(ele) {
-            var $target = ele.next();
+        toggle: function(title) {
+            var $panel = title.next();
 
-            if ( $target.hasClass("hide") ) {
-                this.show($target);
+            if ( $panel.hasClass("hide") ) {
+                this.show($panel);
             } else {
-                this.hide($target);
+                this.hide($panel);
             }
         },
 
         moveTo: function(target) {
+            // Simple switch statement facilitating focus movement 
             var _this = this,
                 $focused = $(document.activeElement),
+
+                // Grab the next "dt"
                 $next = $focused.nextAll("dt").first(),
+
+                // Grab the previous "dt"
                 $previous = $focused.prevAll("dt").first();
 
             switch(true) {
@@ -196,35 +214,17 @@
                     $previous.focus();
                     break;
             }
-        },
-
-        // Get the active title and assign tabindex on tabpanel children
-        setChildrenTabIndex: function() {
-            var $active = $("dt[aria-expanded='true']"),
-                $activeTabPanel = $active.next();
-
-            // The children needs to be replaced with find like in setDefaultAriaAttr
-            $activeTabPanel.children().attr("tabindex", "0");
-        },
-
-        // Get the non-active titles and unset tabindex on tabpanel children
-        unsetChildrenTabIndex: function() {
-            var $nonActive = $("dt[aria-expanded='false']"),
-                $nonActiveTabPanel = $nonActive.next();
-
-            // The children needs to be replaced with find like in setDefaultAriaAttr
-            $nonActiveTabPanel.children().attr("tabindex", "-1");
         }
-		};
+    };
 
-		// A really lightweight plugin wrapper around the constructor,
-		// preventing against multiple instantiations
-		$.fn[ pluginName ] = function ( options ) {
-				return this.each(function() {
-						if ( !$.data( this, "plugin_" + pluginName ) ) {
-								$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
-						}
-				});
-		};
+    // A really lightweight plugin wrapper around the constructor,
+    // preventing against multiple instantiations
+    $.fn[ pluginName ] = function ( options ) {
+        return this.each(function() {
+            if ( !$.data( this, "plugin_" + pluginName ) ) {
+                $.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+            }
+        });
+    };
 
-//})( jQuery, window, document );
+})( jQuery, window, document );
