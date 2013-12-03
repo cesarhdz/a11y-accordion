@@ -3,7 +3,7 @@
 	"title": "a11y Accordion",
 	"description": "An accessible jQuery accordion plugin.",
 	"author": "Nathan Kleekamp",
-	"homepage": "https://github.com/rubric77/accessible-accordion/",
+	"homepage": "https://github.com/IIP-OIE/a11y-accordion/blob/master/package.json",
 	"devDependencies": {
 		"grunt": "~0.4.1",
 		"grunt-cli": "~0.1.7",
