@@ -4,13 +4,13 @@ jQuery Accordion that mostly complies with [WAI-Aria 1.0 Authoring Practices](ht
 
 ## Keyboard controls
 
-Open/close panel: space or return key
-Previous title: up or left key
-Next title: down or right key
-First title: home key
-Last title: end key
-Focus panel content: tab key
-Go to title if panel content focused: ctrl+up keys
+* Open/close panel: space or return key
+* Previous title: up or left key
+* Next title: down or right key
+* First title: home key
+* Last title: end key
+* Focus panel content: tab key
+* Go to title if panel content focused: ctrl+up keys
 
 ## Instructions
 
