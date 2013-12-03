@@ -2,6 +2,16 @@
 
 jQuery Accordion that mostly complies with [WAI-Aria 1.0 Authoring Practices](http://www.w3.org/TR/wai-aria-practices/#accordion). This version does not have Control+PageUp and Control+PageDown support.
 
+## Keyboard controls
+
+Open/close panel: space or return key
+Previous title: up or left key
+Next title: down or right key
+First title: home key
+Last title: end key
+Focus panel content: tab key
+Go to title if panel content focused: ctrl+up keys
+
 ## Instructions
 
 In your markup you'll need: 
@@ -33,6 +43,12 @@ Before the closing `</body>` tag, include a link to the jQuery and the plugin, a
   </body>
 </html>
 ```
+
+## Browser Support
+
+Chrome, FF, Opera, Safari, IE10, IE9-7\*
+
+\*This plugin uses CSS3 transitions to collapse the accordion, which isn't available on IE9-7. Checkout Modernizr if you absolutely need a similar effect.
 
 ## License
 
