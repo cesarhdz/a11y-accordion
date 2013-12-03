@@ -2,7 +2,7 @@
 
 jQuery Accordion that mostly complies with [WAI-Aria 1.0 Authoring Practices](http://www.w3.org/TR/wai-aria-practices/#accordion). This version does not have Control+PageUp and Control+PageDown support.
 
-# Instructions
+## Instructions
 
 In your markup you'll need: 
 
