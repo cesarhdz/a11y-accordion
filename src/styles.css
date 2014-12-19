@@ -1,10 +1,10 @@
-.accordion {
+[role=tablist] {
   margin: 1em;
   clear: left;
   border-bottom: 1px solid #ccc;
 }
 
-.accordion dt {
+[role=tablist] [role=tab] {
   background-color: #e5e5e5;
   border: 1px solid #ccc;
   border-bottom: 0;
@@ -13,11 +13,11 @@
   cursor: pointer;
 }
 
-.accordion dt:focus {
+[role=tablist] [role=tab]:focus {
   background-color: #ccc;
 }
 
-.accordion dd {
+[role=tablist] [role=tabpanel] {
   margin: 0;
   border: 1px solid #ccc;
   border-bottom: 0;
@@ -27,11 +27,6 @@
   transition: all 0.3s ease-out;
 }
 
-.accordion p {
-  padding: 1em;
-  margin: 0
-}
-
-.accordion .hide {
+[role=tablist] [aria-hidden=true] {
   max-height: 0;
 }
