@@ -1,3 +1,11 @@
+/*
+ *  a11y Accordion - v.10
+ *  An accessible jquery accordion plugin.
+ *  
+ *
+ *  Made by Nathan Kleekamp
+ *  Under MIT License
+ */
 ;(function ( $, window, document, undefined ) {
 
     // Create the defaults once
@@ -23,12 +31,12 @@
     Plugin.prototype = {
         init: function () {
             // These are all "dt" elements on the page in an accordion
-            this.$allTitles = $(".js-accordion dt");
+            this.$allTitles = $("[role=tablist] [role=tab]");
 
             // These are only the "dt" elements in the element
-            this.$titles = $("dt", this.element);
+            this.$titles = $("[role=tab]", this.element);
 
-            this.$panels = $("dd", this.element);
+            this.$panels = $("[role=tabpanel]", this.element);
 
             this.bindUiActions();
             this.setDefaultAriaAttr();
@@ -140,17 +148,30 @@
             });
         },
 
-        show: function($panel) {
+        show: function($panel){
+
+            var _this = this;
+
             // Removes "hide" class and sets appropriate aria/tabindex attr on title, panel,
             // and all panel children.
+            this.$panels.each(function(i, panel){
+                _this.hide($(panel))
+            })
+
+
+            // Show selected panel
             $panel.
                 removeClass("hide").
                 attr("aria-hidden", "false").
+
+                // Removes internal index
                 find("*").each(function() {
                     $(this).attr("tabindex", "0");
             });
 
+
             // panel.prev() is the "title"
+            // @TODO Use aria-labelled-ny or aria-controls
             $panel.prev().attr("aria-expanded", "true");
         },
 
@@ -184,10 +205,10 @@
                 $focused = $(document.activeElement),
 
                 // Grab the next "dt"
-                $next = $focused.nextAll("dt").first(),
+                $next = $focused.nextAll("[role=tab]").first(),
 
                 // Grab the previous "dt"
-                $previous = $focused.prevAll("dt").first();
+                $previous = $focused.prevAll("[role=tab]").first();
 
             switch(true) {
                 case(target === "first"):
